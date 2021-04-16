@@ -63,6 +63,7 @@ public class WhatShouldWeCacheBenchmarks {
       }
     };
     fakeClient = new Client() {
+      @Override
       public Response execute(Request request, Request.Options options) throws IOException {
         Map<String, Collection<String>> headers = new LinkedHashMap<String, Collection<String>>();
         return Response.builder()

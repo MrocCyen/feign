@@ -55,10 +55,8 @@ public abstract class Feign {
 	 * <ul>
 	 *   <li>{@code Route53}: would match a class {@code route53.Route53}</li>
 	 *   <li>{@code Route53#list()}: would match a method {@code route53.Route53#list()}</li>
-	 *   <li>{@code Route53#listAt(Marker)}: would match a method {@code
-	 * route53.Route53#listAt(Marker)}</li>
-	 *   <li>{@code Route53#listByNameAndType(String, String)}: would match a method {@code
-	 * route53.Route53#listAt(String, String)}</li>
+	 *   <li>{@code Route53#listAt(Marker)}: would match a method {@code route53.Route53#listAt(Marker)}</li>
+	 *   <li>{@code Route53#listByNameAndType(String, String)}: would match a method {@code route53.Route53#listAt(String, String)}</li>
 	 * </ul>
 	 * </pre>
 	 * <p>
@@ -67,6 +65,8 @@ public abstract class Feign {
 	 * @param targetType {@link feign.Target#type() type} of the Feign interface.
 	 * @param method     invoked method, present on {@code type} or its super.
 	 * @see MethodMetadata#configKey()
+	 * <p>
+	 * 创建feign客户端每个方法的唯一表示key
 	 */
 	public static String configKey(Class targetType, Method method) {
 		StringBuilder builder = new StringBuilder();
@@ -94,31 +94,81 @@ public abstract class Feign {
 	 * Returns a new instance of an HTTP API, defined by annotations in the {@link Feign Contract},
 	 * for the specified {@code target}. You should cache this result.
 	 * <p>
-	 * todo 这个是产生出feign客户端实例的方法
+	 * todo 这个是产生出feign客户端实例的方法，实例是一个jdk代理对象
 	 */
 	public abstract <T> T newInstance(Target<T> target);
 
 	/**
-	 * todo feign对象构建器，这里是使用的建造器模式
+	 * todo feign客户端对象构建器，这里是使用的建造器模式
 	 */
 	public static class Builder {
-
+		/**
+		 * 请求拦截器，请求在请求时执行
+		 */
 		private final List<RequestInterceptor> requestInterceptors = new ArrayList<>();
+		/**
+		 * feign日志等级
+		 */
 		private Logger.Level logLevel = Logger.Level.NONE;
+		/**
+		 * 用于获取feign客户端每个方法的元数据，默认获取feign定义的注解做标记的方法和类
+		 */
 		private Contract contract = new Contract.Default();
+		/**
+		 * 执行具体的http请求
+		 */
 		private Client client = new Client.Default(null, null);
+		/**
+		 * 重试
+		 */
 		private Retryer retryer = new Retryer.Default();
+		/**
+		 * 日志
+		 */
 		private Logger logger = new NoOpLogger();
+		/**
+		 * 编码器
+		 */
 		private Encoder encoder = new Encoder.Default();
+		/**
+		 * 解码器
+		 */
 		private Decoder decoder = new Decoder.Default();
+		/**
+		 * 查询参数编码器
+		 */
 		private QueryMapEncoder queryMapEncoder = new FieldQueryMapEncoder();
+		/**
+		 * 错误异常解码器
+		 */
 		private ErrorDecoder errorDecoder = new ErrorDecoder.Default();
+		/**
+		 * 所有请求的共有参数设置
+		 */
 		private Options options = new Options();
+		/**
+		 * InvocationHandler工厂
+		 */
 		private InvocationHandlerFactory invocationHandlerFactory = new InvocationHandlerFactory.Default();
+		/**
+		 * 是否解码出现异常时显示404
+		 */
 		private boolean decode404;
+		/**
+		 * 解码后关闭
+		 */
 		private boolean closeAfterDecode = true;
+		/**
+		 * 异常传播策略
+		 */
 		private ExceptionPropagationPolicy propagationPolicy = NONE;
+		/**
+		 * 强制进行解码，默认是false
+		 */
 		private boolean forceDecoding = false;
+		/**
+		 * feign配置信息可以在构建的时候进行自定义处理
+		 */
 		private List<Capability> capabilities = new ArrayList<>();
 
 		public Builder logLevel(Logger.Level logLevel) {
