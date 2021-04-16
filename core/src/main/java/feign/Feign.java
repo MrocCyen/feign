@@ -13,14 +13,6 @@
  */
 package feign;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import feign.Logger.Level;
 import feign.Logger.NoOpLogger;
 import feign.ReflectiveFeign.ParseHandlersByName;
 import feign.Request.Options;
@@ -29,6 +21,13 @@ import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
 import feign.querymap.FieldQueryMapEncoder;
+
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static feign.ExceptionPropagationPolicy.NONE;
 
@@ -94,13 +93,17 @@ public abstract class Feign {
 	/**
 	 * Returns a new instance of an HTTP API, defined by annotations in the {@link Feign Contract},
 	 * for the specified {@code target}. You should cache this result.
+	 * <p>
+	 * todo 这个是产生出feign客户端实例的方法
 	 */
 	public abstract <T> T newInstance(Target<T> target);
 
+	/**
+	 * todo feign对象构建器，这里是使用的建造器模式
+	 */
 	public static class Builder {
 
-		private final List<RequestInterceptor> requestInterceptors =
-				new ArrayList<RequestInterceptor>();
+		private final List<RequestInterceptor> requestInterceptors = new ArrayList<>();
 		private Logger.Level logLevel = Logger.Level.NONE;
 		private Contract contract = new Contract.Default();
 		private Client client = new Client.Default(null, null);
@@ -111,8 +114,7 @@ public abstract class Feign {
 		private QueryMapEncoder queryMapEncoder = new FieldQueryMapEncoder();
 		private ErrorDecoder errorDecoder = new ErrorDecoder.Default();
 		private Options options = new Options();
-		private InvocationHandlerFactory invocationHandlerFactory =
-				new InvocationHandlerFactory.Default();
+		private InvocationHandlerFactory invocationHandlerFactory = new InvocationHandlerFactory.Default();
 		private boolean decode404;
 		private boolean closeAfterDecode = true;
 		private ExceptionPropagationPolicy propagationPolicy = NONE;
@@ -270,6 +272,9 @@ public abstract class Feign {
 			return build().newInstance(target);
 		}
 
+		/**
+		 * 根据设置的参数，创建feign对象，实例返回的是ReflectiveFeign
+		 */
 		public Feign build() {
 			Client client = Capability.enrich(this.client, capabilities);
 			Retryer retryer = Capability.enrich(this.retryer, capabilities);
@@ -291,6 +296,11 @@ public abstract class Feign {
 			ParseHandlersByName handlersByName =
 					new ParseHandlersByName(contract, options, encoder, decoder, queryMapEncoder,
 							errorDecoder, synchronousMethodHandlerFactory);
+
+			//这里主要关注一下invocationHandlerFactory，这个是产生代理对象的工厂，默认是InvocationHandlerFactory.Default()
+			//InvocationHandler默认使用ReflectiveFeign.FeignInvocationHandler
+			//todo 用户可以自己实现，用于扩展自己的InvocationHandlerFactory
+			//todo 用户还需要实现一个InvocationHandler的对象，用于实现代理逻辑
 			return new ReflectiveFeign(handlersByName, invocationHandlerFactory, queryMapEncoder);
 		}
 	}
