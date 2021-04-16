@@ -187,7 +187,7 @@ public class ReflectiveFeign extends Feign {
 
 		protected final MethodMetadata metadata;
 		protected final Target<?> target;
-		private final Map<Integer, Expander> indexToExpander = new LinkedHashMap<Integer, Expander>();
+		private final Map<Integer, Expander> indexToExpander = new LinkedHashMap<>();
 
 		private BuildTemplateByResolvingArgs(MethodMetadata metadata, QueryMapEncoder queryMapEncoder,
 		                                     Target target) {

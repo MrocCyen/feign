@@ -37,7 +37,7 @@ public final class MethodMetadata implements Serializable {
 	private boolean queryMapEncoded;
 	private transient Type bodyType;
 	private final RequestTemplate template = new RequestTemplate();
-	private final List<String> formParams = new ArrayList<String>();
+	private final List<String> formParams = new ArrayList<>();
 	private final Map<Integer, Collection<String>> indexToName = new LinkedHashMap<>();
 	private final Map<Integer, Class<? extends Expander>> indexToExpanderClass = new LinkedHashMap<>();
 	private final Map<Integer, Boolean> indexToEncoded = new LinkedHashMap<>();

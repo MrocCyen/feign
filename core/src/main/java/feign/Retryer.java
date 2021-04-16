@@ -52,6 +52,7 @@ public interface Retryer extends Cloneable {
 			return System.currentTimeMillis();
 		}
 
+		@Override
 		public void continueOrPropagate(RetryableException e) {
 			if (attempt++ >= maxAttempts) {
 				throw e;

@@ -328,7 +328,8 @@ public abstract class Feign {
 		public Feign build() {
 			Client client = Capability.enrich(this.client, capabilities);
 			Retryer retryer = Capability.enrich(this.retryer, capabilities);
-			List<RequestInterceptor> requestInterceptors = this.requestInterceptors.stream()
+			List<RequestInterceptor> requestInterceptors = this.requestInterceptors
+					.stream()
 					.map(ri -> Capability.enrich(ri, capabilities))
 					.collect(Collectors.toList());
 			Logger logger = Capability.enrich(this.logger, capabilities);
@@ -336,16 +337,13 @@ public abstract class Feign {
 			Options options = Capability.enrich(this.options, capabilities);
 			Encoder encoder = Capability.enrich(this.encoder, capabilities);
 			Decoder decoder = Capability.enrich(this.decoder, capabilities);
-			InvocationHandlerFactory invocationHandlerFactory =
-					Capability.enrich(this.invocationHandlerFactory, capabilities);
+			InvocationHandlerFactory invocationHandlerFactory = Capability.enrich(this.invocationHandlerFactory, capabilities);
 			QueryMapEncoder queryMapEncoder = Capability.enrich(this.queryMapEncoder, capabilities);
 
-			SynchronousMethodHandler.Factory synchronousMethodHandlerFactory =
-					new SynchronousMethodHandler.Factory(client, retryer, requestInterceptors, logger,
-							logLevel, decode404, closeAfterDecode, propagationPolicy, forceDecoding);
-			ParseHandlersByName handlersByName =
-					new ParseHandlersByName(contract, options, encoder, decoder, queryMapEncoder,
-							errorDecoder, synchronousMethodHandlerFactory);
+			SynchronousMethodHandler.Factory synchronousMethodHandlerFactory = new SynchronousMethodHandler.Factory(client,
+					retryer, requestInterceptors, logger, logLevel, decode404, closeAfterDecode, propagationPolicy, forceDecoding);
+			ParseHandlersByName handlersByName = new ParseHandlersByName(contract, options, encoder, decoder, queryMapEncoder,
+					errorDecoder, synchronousMethodHandlerFactory);
 
 			//这里主要关注一下invocationHandlerFactory，这个是产生代理对象的工厂，默认是InvocationHandlerFactory.Default()
 			//InvocationHandler默认使用ReflectiveFeign.FeignInvocationHandler
