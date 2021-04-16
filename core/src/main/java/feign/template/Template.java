@@ -31,25 +31,48 @@ import java.util.stream.Collectors;
 public class Template {
 
 	private static final Logger logger = Logger.getLogger(Template.class.getName());
+
 	private static final Pattern QUERY_STRING_PATTERN = Pattern.compile("(?<!\\{)(\\?)");
+
+	/**
+	 * 模板字符串，后续需要进行解析
+	 */
 	private final String template;
+	/**
+	 * 允许可以为解决，通过ExpansionOptions枚举进行设置
+	 */
 	private final boolean allowUnresolved;
+	/**
+	 * 编码选项
+	 */
 	private final EncodingOptions encode;
+	/**
+	 * 是否编码斜线
+	 */
 	private final boolean encodeSlash;
+	/**
+	 * 字符集
+	 */
 	private final Charset charset;
+
+	/**
+	 * 模板的模块列表
+	 */
 	private final List<TemplateChunk> templateChunks = new ArrayList<>();
 
 	/**
 	 * Create a new Template.
 	 *
 	 * @param value           of the template.
-	 * @param allowUnresolved if unresolved expressions should remain.
+	 * @param allowUnresolved if unresolved expressions should remain. 如果未解决的表达式应该保留
 	 * @param encode          all values.
 	 * @param encodeSlash     if slash characters should be encoded.
 	 */
-	Template(
-			String value, ExpansionOptions allowUnresolved, EncodingOptions encode, boolean encodeSlash,
-			Charset charset) {
+	Template(String value,
+	         ExpansionOptions allowUnresolved,
+	         EncodingOptions encode,
+	         boolean encodeSlash,
+	         Charset charset) {
 		if (value == null) {
 			throw new IllegalArgumentException("template is required.");
 		}
@@ -58,6 +81,7 @@ public class Template {
 		this.encode = encode;
 		this.encodeSlash = encodeSlash;
 		this.charset = charset;
+		//todo 设置了模板，需要解析模板
 		this.parseTemplate();
 	}
 
@@ -70,13 +94,17 @@ public class Template {
 	 * @param charset         of the result.
 	 * @param chunks          for this template.
 	 */
-	Template(ExpansionOptions allowUnresolved, EncodingOptions encode, boolean encodeSlash,
-	         Charset charset, List<TemplateChunk> chunks) {
+	Template(ExpansionOptions allowUnresolved,
+	         EncodingOptions encode,
+	         boolean encodeSlash,
+	         Charset charset,
+	         List<TemplateChunk> chunks) {
 		this.templateChunks.addAll(chunks);
 		this.allowUnresolved = ExpansionOptions.ALLOW_UNRESOLVED == allowUnresolved;
 		this.encode = encode;
 		this.encodeSlash = encodeSlash;
 		this.charset = charset;
+		//todo 设置了TemplateChunk，从TemplateChunk中获取
 		this.template = this.toString();
 	}
 
@@ -204,6 +232,8 @@ public class Template {
 
 	/**
 	 * Parse a template fragment.
+	 * <p>
+	 * 处理模板
 	 *
 	 * @param fragment to parse
 	 */
@@ -327,7 +357,14 @@ public class Template {
 	}
 
 	public enum EncodingOptions {
-		REQUIRED(true), NOT_REQUIRED(false);
+		/**
+		 * 需要编码
+		 */
+		REQUIRED(true),
+		/**
+		 * 不需要编码
+		 */
+		NOT_REQUIRED(false);
 
 		private boolean shouldEncode;
 
@@ -341,7 +378,15 @@ public class Template {
 	}
 
 	public enum ExpansionOptions {
-		ALLOW_UNRESOLVED, REQUIRED
+		/**
+		 * 允许不解决
+		 */
+		ALLOW_UNRESOLVED,
+
+		/**
+		 * 需要解决
+		 */
+		REQUIRED
 	}
 
 }

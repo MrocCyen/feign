@@ -304,6 +304,8 @@ public final class RequestTemplate implements Serializable {
 	/**
 	 * Creates a {@link Request} from this template. The template must be resolved before calling this
 	 * method, or an {@link IllegalStateException} will be thrown.
+	 * <p>
+	 * todo 这个方法在Target#apply方法中进行调用
 	 *
 	 * @return a new Request instance.
 	 * @throws IllegalStateException if this template has not been resolved.
