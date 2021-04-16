@@ -13,6 +13,9 @@
  */
 package feign;
 
+import feign.annotation.Param;
+import feign.annotation.QueryMap;
+import feign.annotation.RequestLine;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import okhttp3.mockwebserver.MockResponse;

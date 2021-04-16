@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import feign.InvocationHandlerFactory.MethodHandler;
-import feign.Param.Expander;
+import feign.annotation.Param.Expander;
 import feign.Request.Options;
 import feign.codec.*;
 import feign.template.UriUtils;

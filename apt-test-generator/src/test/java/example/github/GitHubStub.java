@@ -14,7 +14,7 @@
 package example.github;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import feign.Experimental;
+import feign.annotation.Experimental;
 
 public class GitHubStub
     implements example.github.GitHubExample.GitHub {

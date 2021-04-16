@@ -14,9 +14,8 @@
 package feign.reactive;
 
 import feign.Contract;
-import feign.Param;
-import feign.RequestLine;
-import feign.reactive.ReactiveDelegatingContract;
+import feign.annotation.Param;
+import feign.annotation.RequestLine;
 import io.reactivex.Flowable;
 import java.util.stream.Stream;
 import org.junit.Rule;

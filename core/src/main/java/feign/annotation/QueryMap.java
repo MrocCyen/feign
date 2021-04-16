@@ -11,7 +11,10 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package feign;
+package feign.annotation;
+
+import feign.RequestTemplate;
+import feign.annotation.Param;
 
 import java.lang.annotation.Retention;
 import java.util.List;

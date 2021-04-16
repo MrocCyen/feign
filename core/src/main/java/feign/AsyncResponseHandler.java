@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.concurrent.CompletableFuture;
 import feign.Logger.Level;
+import feign.annotation.Experimental;
 import feign.codec.DecodeException;
 import feign.codec.Decoder;
 import feign.codec.ErrorDecoder;

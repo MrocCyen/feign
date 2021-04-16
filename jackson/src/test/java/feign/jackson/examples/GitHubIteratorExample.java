@@ -14,8 +14,8 @@
 package feign.jackson.examples;
 
 import feign.Feign;
-import feign.Param;
-import feign.RequestLine;
+import feign.annotation.Param;
+import feign.annotation.RequestLine;
 import feign.jackson.JacksonIteratorDecoder;
 import java.io.Closeable;
 import java.io.IOException;

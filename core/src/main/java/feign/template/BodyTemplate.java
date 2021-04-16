@@ -14,11 +14,13 @@
 package feign.template;
 
 import feign.Util;
+import feign.annotation.Body;
+
 import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
- * Template for @{@link feign.Body} annotated Templates. Unresolved expressions are preserved as
+ * Template for @{@link Body} annotated Templates. Unresolved expressions are preserved as
  * literals and literals are not URI encoded.
  */
 public final class BodyTemplate extends Template {

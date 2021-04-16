@@ -14,6 +14,7 @@
 package feign;
 
 import feign.Request.HttpMethod;
+import feign.annotation.RequestLine;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

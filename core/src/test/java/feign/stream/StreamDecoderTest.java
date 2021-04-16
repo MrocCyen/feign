@@ -17,7 +17,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import feign.Feign;
 import feign.Request;
 import feign.Request.HttpMethod;
-import feign.RequestLine;
+import feign.annotation.RequestLine;
 import feign.Response;
 import feign.Util;
 import java.io.BufferedReader;

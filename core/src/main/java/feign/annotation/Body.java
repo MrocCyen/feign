@@ -11,25 +11,34 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package feign;
+package feign.annotation;
+
+import feign.RequestTemplate;
 
 import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import java.util.Map;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Expands the uri template supplied in the {@code value}, permitting path and query variables, or
- * just the http method. Templates should conform to
- * <a href="https://tools.ietf.org/html/rfc6570">RFC 6570</a>. Support is limited to Simple String
- * expansion and Reserved Expansion (Level 1 and Level 2) expressions.
+ * A possibly templated body of a PUT or POST command. variables wrapped in curly braces are
+ * expanded before the request is submitted. <br>
+ * ex. <br>
+ * 
+ * <pre>
+ * &#064;Body(&quot;&lt;v01:getResourceRecordsOfZone&gt;&lt;zoneName&gt;{zoneName}&lt;/zoneName&gt;&lt;rrType&gt;0&lt;/rrType&gt;&lt;/v01:getResourceRecordsOfZone&gt;&quot;)
+ * List&lt;Record&gt; listByZone(&#64;Param(&quot;zoneName&quot;) String zoneName);
+ * </pre>
+ * 
+ * <br>
+ * Note that if you'd like curly braces literally in the body, urlencode them first.
+ *
+ * @see RequestTemplate#expand(String, Map)
  */
-@java.lang.annotation.Target(METHOD)
+@Target(METHOD)
 @Retention(RUNTIME)
-public @interface RequestLine {
+public @interface Body {
 
   String value();
-
-  boolean decodeSlash() default true;
-
-  CollectionFormat collectionFormat() default CollectionFormat.EXPLODED;
 }

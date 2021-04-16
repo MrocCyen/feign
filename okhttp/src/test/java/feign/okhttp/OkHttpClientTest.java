@@ -14,8 +14,8 @@
 package feign.okhttp;
 
 import feign.Feign.Builder;
-import feign.Headers;
-import feign.RequestLine;
+import feign.annotation.Headers;
+import feign.annotation.RequestLine;
 import feign.Response;
 import feign.Request;
 import feign.Util;

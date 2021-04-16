@@ -13,6 +13,8 @@
  */
 package feign;
 
+import feign.annotation.Experimental;
+
 import static feign.Util.checkNotNull;
 import java.util.concurrent.CompletableFuture;
 

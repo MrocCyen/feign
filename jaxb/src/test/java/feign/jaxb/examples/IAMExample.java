@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import feign.Feign;
 import feign.Request;
-import feign.RequestLine;
+import feign.annotation.RequestLine;
 import feign.RequestTemplate;
 import feign.Target;
 import feign.jaxb.JAXBContextFactory;

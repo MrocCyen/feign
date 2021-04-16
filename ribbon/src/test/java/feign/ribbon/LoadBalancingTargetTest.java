@@ -20,7 +20,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.URL;
 import feign.Feign;
-import feign.RequestLine;
+import feign.annotation.RequestLine;
 import static com.netflix.config.ConfigurationManager.getConfigInstance;
 import static org.junit.Assert.assertEquals;
 

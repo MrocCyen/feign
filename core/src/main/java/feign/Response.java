@@ -13,6 +13,8 @@
  */
 package feign;
 
+import feign.annotation.Experimental;
+
 import static feign.Util.*;
 import java.io.*;
 import java.nio.charset.Charset;

@@ -13,6 +13,8 @@
  */
 package feign;
 
+import feign.annotation.Experimental;
+
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;

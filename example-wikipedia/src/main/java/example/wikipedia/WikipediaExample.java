@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import feign.*;
+import feign.annotation.Param;
+import feign.annotation.RequestLine;
 import feign.gson.GsonDecoder;
 
 public class WikipediaExample {

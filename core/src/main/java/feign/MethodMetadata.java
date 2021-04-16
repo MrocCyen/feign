@@ -19,7 +19,8 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import feign.Param.Expander;
+import feign.annotation.Param.Expander;
+import feign.annotation.Experimental;
 
 /**
  * 方法元数据

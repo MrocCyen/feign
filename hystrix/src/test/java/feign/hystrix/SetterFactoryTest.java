@@ -20,7 +20,7 @@ import com.netflix.hystrix.exception.HystrixRuntimeException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import feign.RequestLine;
+import feign.annotation.RequestLine;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 

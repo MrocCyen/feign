@@ -16,7 +16,7 @@ package feign.sax.examples;
 import org.xml.sax.helpers.DefaultHandler;
 import feign.Feign;
 import feign.Request;
-import feign.RequestLine;
+import feign.annotation.RequestLine;
 import feign.RequestTemplate;
 import feign.Target;
 import feign.sax.SAXDecoder;

@@ -18,6 +18,7 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.data.MapEntry.entry;
 import com.google.gson.reflect.TypeToken;
+import feign.annotation.*;
 import org.assertj.core.api.Fail;
 import org.junit.Rule;
 import org.junit.Test;

@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import feign.*;
+import feign.annotation.Param;
+import feign.annotation.RequestLine;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;

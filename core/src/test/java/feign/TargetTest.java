@@ -16,6 +16,9 @@ package feign;
 import static feign.assertj.MockWebServerAssertions.assertThat;
 import feign.Target.HardCodedTarget;
 import java.net.URI;
+
+import feign.annotation.Param;
+import feign.annotation.RequestLine;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.Rule;

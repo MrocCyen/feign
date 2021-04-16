@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import feign.Request.Options;
+import feign.annotation.Experimental;
 
 /**
  * Submits HTTP {@link Request requests} asynchronously, with an optional context.

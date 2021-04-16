@@ -14,6 +14,9 @@
 package feign.http2client.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import feign.annotation.Headers;
+import feign.annotation.RequestLine;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.CoreMatchers;
 import org.junit.Ignore;

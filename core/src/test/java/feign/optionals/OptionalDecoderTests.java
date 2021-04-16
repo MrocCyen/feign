@@ -14,7 +14,7 @@
 package feign.optionals;
 
 import feign.Feign;
-import feign.RequestLine;
+import feign.annotation.RequestLine;
 import feign.codec.Decoder;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;

@@ -14,6 +14,8 @@
 package feign;
 
 import com.google.gson.reflect.TypeToken;
+import feign.annotation.Param;
+import feign.annotation.RequestLine;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.Rule;

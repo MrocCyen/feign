@@ -24,6 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import feign.Request.HttpMethod;
+import feign.annotation.*;
 
 /**
  * Defines what annotations and values are valid on interfaces.

@@ -14,6 +14,7 @@
 package feign;
 
 import feign.Request.HttpMethod;
+import feign.annotation.Experimental;
 import feign.template.*;
 import java.io.Serializable;
 import java.net.URI;

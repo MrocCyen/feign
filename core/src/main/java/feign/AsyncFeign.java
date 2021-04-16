@@ -21,6 +21,7 @@ import java.util.function.Supplier;
 import feign.Logger.NoOpLogger;
 import feign.Request.Options;
 import feign.Target.HardCodedTarget;
+import feign.annotation.Experimental;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;

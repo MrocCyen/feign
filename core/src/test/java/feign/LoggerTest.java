@@ -13,6 +13,10 @@
  */
 package feign;
 
+import feign.annotation.Body;
+import feign.annotation.Headers;
+import feign.annotation.Param;
+import feign.annotation.RequestLine;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.assertj.core.api.SoftAssertions;

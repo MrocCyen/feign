@@ -15,8 +15,8 @@ package feign.gson.examples;
 
 import java.util.List;
 import feign.Feign;
-import feign.Param;
-import feign.RequestLine;
+import feign.annotation.Param;
+import feign.annotation.RequestLine;
 import feign.gson.GsonDecoder;
 
 /**

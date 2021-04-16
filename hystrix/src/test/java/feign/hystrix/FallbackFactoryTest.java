@@ -14,7 +14,7 @@
 package feign.hystrix;
 
 import feign.FeignException;
-import feign.RequestLine;
+import feign.annotation.RequestLine;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -14,10 +14,10 @@
 package feign.benchmark;
 
 import java.util.List;
-import feign.Body;
-import feign.Headers;
-import feign.Param;
-import feign.RequestLine;
+import feign.annotation.Body;
+import feign.annotation.Headers;
+import feign.annotation.Param;
+import feign.annotation.RequestLine;
 import feign.Response;
 
 @Headers("Accept: application/json")

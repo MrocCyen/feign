@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import feign.Feign.ResponseMappingDecoder;
 import feign.Request.HttpMethod;
 import feign.Target.HardCodedTarget;
+import feign.annotation.*;
 import feign.codec.DecodeException;
 import feign.codec.Decoder;
 import feign.codec.EncodeException;
@@ -49,7 +50,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
-import static feign.ExceptionPropagationPolicy.*;
+
 import static feign.Util.*;
 import static feign.assertj.MockWebServerAssertions.assertThat;
 import static org.assertj.core.data.MapEntry.entry;

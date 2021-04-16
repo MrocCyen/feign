@@ -13,6 +13,8 @@
  */
 package feign;
 
+import feign.annotation.Experimental;
+
 import java.lang.reflect.*;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;

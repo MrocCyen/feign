@@ -13,7 +13,7 @@
  */
 package feign.querymap;
 
-import feign.Param;
+import feign.annotation.Param;
 import feign.QueryMapEncoder;
 import org.junit.Rule;
 import org.junit.Test;

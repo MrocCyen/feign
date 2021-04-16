@@ -34,7 +34,7 @@ import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
 
 @SupportedAnnotationTypes({
-    "feign.RequestLine"
+    "feign.annotation.RequestLine"
 })
 @AutoService(Processor.class)
 public class GenerateTestStubAPT extends AbstractProcessor {

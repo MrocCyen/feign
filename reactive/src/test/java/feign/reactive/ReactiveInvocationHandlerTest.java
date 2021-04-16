@@ -20,7 +20,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import feign.InvocationHandlerFactory.MethodHandler;
-import feign.RequestLine;
+import feign.annotation.RequestLine;
 import feign.Target;
 import io.reactivex.Flowable;
 import java.io.IOException;

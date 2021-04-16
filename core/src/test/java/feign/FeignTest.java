@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import feign.Feign.ResponseMappingDecoder;
 import feign.Request.HttpMethod;
 import feign.Target.HardCodedTarget;
+import feign.annotation.*;
 import feign.querymap.BeanQueryMapEncoder;
 import feign.querymap.FieldQueryMapEncoder;
 import okhttp3.mockwebserver.MockResponse;

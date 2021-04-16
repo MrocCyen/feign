@@ -20,13 +20,13 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-import org.hamcrest.Matchers;
+
 import org.junit.Before;
 import org.junit.Test;
 import feign.Capability;
 import feign.Feign;
 import feign.FeignException;
-import feign.RequestLine;
+import feign.annotation.RequestLine;
 import feign.mock.HttpMethod;
 import feign.mock.MockClient;
 import feign.mock.MockTarget;
