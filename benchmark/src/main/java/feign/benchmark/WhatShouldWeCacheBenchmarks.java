@@ -58,6 +58,7 @@ public class WhatShouldWeCacheBenchmarks {
       private final List<MethodMetadata> cached =
           new Default().parseAndValidateMetadata(FeignTestInterface.class);
 
+      @Override
       public List<MethodMetadata> parseAndValidateMetadata(Class<?> declaring) {
         return cached;
       }

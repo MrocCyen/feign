@@ -58,16 +58,19 @@ public interface Contract {
 						"Only single-level inheritance supported: %s",
 						targetType.getSimpleName());
 			}
-			final Map<String, MethodMetadata> result = new LinkedHashMap<String, MethodMetadata>();
+
+			final Map<String, MethodMetadata> result = new LinkedHashMap<>();
+			//遍历这个类的每个方法
 			for (final Method method : targetType.getMethods()) {
-				if (method.getDeclaringClass() == Object.class ||
-						(method.getModifiers() & Modifier.STATIC) != 0 ||
-						Util.isDefault(method)) {
+				//Object的方法、静态方法、默认方法，直接跳过
+				if (method.getDeclaringClass() == Object.class
+						|| (method.getModifiers() & Modifier.STATIC) != 0
+						|| Util.isDefault(method)) {
 					continue;
 				}
+				//解析出方法的元数据信息
 				final MethodMetadata metadata = parseAndValidateMetadata(targetType, method);
-				checkState(!result.containsKey(metadata.configKey()), "Overrides unsupported: %s",
-						metadata.configKey());
+				checkState(!result.containsKey(metadata.configKey()), "Overrides unsupported: %s", metadata.configKey());
 				result.put(metadata.configKey(), metadata);
 			}
 			return new ArrayList<>(result.values());
@@ -84,16 +87,21 @@ public interface Contract {
 		/**
 		 * Called indirectly by {@link #parseAndValidateMetadata(Class)}.
 		 * <p>
-		 * 处理和验证方法元数据
+		 * 解析出方法的元数据信息
 		 */
 		protected MethodMetadata parseAndValidateMetadata(Class<?> targetType, Method method) {
 			final MethodMetadata data = new MethodMetadata();
+			//设置目标类型
 			data.targetType(targetType);
+			//设置方法
 			data.method(method);
+			//设置返回类型
 			data.returnType(Types.resolve(targetType, targetType, method.getGenericReturnType()));
+			//设置configKey
 			data.configKey(Feign.configKey(targetType, method));
 
 			//处理类的注解
+			//todo 这里只处理了该类型直接实现的接口，而且要求实现的接口数量只能是1个，这里有问题，多继承接口怎么处理？？？
 			if (targetType.getInterfaces().length == 1) {
 				processAnnotationOnClass(data, targetType.getInterfaces()[0]);
 			}
@@ -115,27 +123,34 @@ public interface Contract {
 			//处理方法参数的注解
 			final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
 			final int count = parameterAnnotations.length;
+			//遍历每个参数，parameterAnnotations[i]是每个参数的注解数组
 			for (int i = 0; i < count; i++) {
 				boolean isHttpAnnotation = false;
 				if (parameterAnnotations[i] != null) {
+					//解析当前参数的注解
 					isHttpAnnotation = processAnnotationsOnParameter(data, parameterAnnotations[i], i);
 				}
 
+				//如果是http的注解，则直接忽略
 				if (isHttpAnnotation) {
 					data.ignoreParamater(i);
 				}
 
+				//当前参数类型是URI，设置urlIndex
 				if (parameterTypes[i] == URI.class) {
 					data.urlIndex(i);
-				} else if (!isHttpAnnotation && parameterTypes[i] != Request.Options.class) {
+				} else if (!isHttpAnnotation && parameterTypes[i] != Request.Options.class) {//不是http注解，而且当前参数类型不是Request.Options
+					//todo 这里有点乱
+					//当前位置已经配置到了MethodMetadata中
 					if (data.isAlreadyProcessed(i)) {
-						checkState(data.formParams().isEmpty() || data.bodyIndex() == null,
-								"Body parameters cannot be used with form parameters.%s", data.warnings());
-					} else {
-						checkState(data.formParams().isEmpty(),
-								"Body parameters cannot be used with form parameters.%s", data.warnings());
-						checkState(data.bodyIndex() == null,
-								"Method has too many Body parameters: %s%s", method, data.warnings());
+						//form表单数据和body数据都不为空时，抛出异常
+						checkState(data.formParams().isEmpty()
+								|| data.bodyIndex() == null, "Body parameters cannot be used with form parameters.%s", data.warnings());
+					} else {//当前位置没有配置到MethodMetadata中
+						//form表单数据不为空时，抛出异常
+						checkState(data.formParams().isEmpty(), "Body parameters cannot be used with form parameters.%s", data.warnings());
+						//当前位置设置了bodyIndex，抛出异常
+						checkState(data.bodyIndex() == null, "Method has too many Body parameters: %s%s", method, data.warnings());
 						data.bodyIndex(i);
 						data.bodyType(Types.resolve(targetType, targetType, genericParameterTypes[i]));
 					}
@@ -231,8 +246,7 @@ public interface Contract {
 		 * links a parameter name to its index in the method signature.
 		 */
 		protected void nameParam(MethodMetadata data, String name, int i) {
-			final Collection<String> names =
-					data.indexToName().containsKey(i) ? data.indexToName().get(i) : new ArrayList<String>();
+			final Collection<String> names = data.indexToName().containsKey(i) ? data.indexToName().get(i) : new ArrayList<>();
 			names.add(name);
 			data.indexToName().put(i, names);
 		}

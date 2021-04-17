@@ -28,24 +28,57 @@ import feign.annotation.Experimental;
 public final class MethodMetadata implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 设置configKey
+	 */
 	private String configKey;
+	/**
+	 * 设置返回类型
+	 */
 	private transient Type returnType;
+	/**
+	 * 设置类型是URI的参数的位置编号
+	 */
 	private Integer urlIndex;
+	/**
+	 * 设置请求体参数的位置编号
+	 */
 	private Integer bodyIndex;
 	private Integer headerMapIndex;
 	private Integer queryMapIndex;
 	private boolean queryMapEncoded;
+	/**
+	 * 请求体参数的类型
+	 */
 	private transient Type bodyType;
 	private final RequestTemplate template = new RequestTemplate();
 	private final List<String> formParams = new ArrayList<>();
+	/**
+	 * 参数位置和参数每个注解的映射
+	 * key是参数的位置
+	 * value是每个直接的名称
+	 */
 	private final Map<Integer, Collection<String>> indexToName = new LinkedHashMap<>();
 	private final Map<Integer, Class<? extends Expander>> indexToExpanderClass = new LinkedHashMap<>();
 	private final Map<Integer, Boolean> indexToEncoded = new LinkedHashMap<>();
 	private transient Map<Integer, Expander> indexToExpander;
 	private BitSet parameterToIgnore = new BitSet();
+	/**
+	 * 是否忽略，可以中断当前方法元数据的解析过程
+	 */
 	private boolean ignored;
+	/**
+	 * 设置目标类型
+	 */
 	private transient Class<?> targetType;
+	/**
+	 * 设置方法
+	 */
 	private transient Method method;
+	/**
+	 * 警告信息
+	 */
 	private transient final List<String> warnings = new ArrayList<>();
 
 	MethodMetadata() {
