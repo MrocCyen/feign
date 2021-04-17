@@ -54,12 +54,16 @@ public class ReflectiveFeign extends Feign {
 	public <T> T newInstance(Target<T> target) {
 		Map<String, MethodHandler> nameToHandler = targetToHandlersByName.apply(target);
 		Map<Method, MethodHandler> methodToHandler = new LinkedHashMap<>();
+		//存储默认方法处理器
 		List<DefaultMethodHandler> defaultMethodHandlers = new LinkedList<>();
 
 		for (Method method : target.type().getMethods()) {
+			//Object的方法，直接跳过
 			if (method.getDeclaringClass() == Object.class) {
 				continue;
 			} else if (Util.isDefault(method)) {
+				//是default方法
+				//使用默认方法处理器
 				DefaultMethodHandler handler = new DefaultMethodHandler(method);
 				defaultMethodHandlers.add(handler);
 				methodToHandler.put(method, handler);
@@ -71,6 +75,7 @@ public class ReflectiveFeign extends Feign {
 		T proxy = (T) Proxy.newProxyInstance(target.type().getClassLoader(),
 				new Class<?>[]{target.type()}, handler);
 
+		//默认方法绑定到代理对象上，解决低于java8版本的jdk不存在默认方法的问题
 		for (DefaultMethodHandler defaultMethodHandler : defaultMethodHandlers) {
 			defaultMethodHandler.bindTo(proxy);
 		}
