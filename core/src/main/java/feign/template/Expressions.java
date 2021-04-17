@@ -1,11 +1,11 @@
 /**
  * Copyright 2012-2020 The Feign Authors
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -19,141 +19,145 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import feign.Util;
 
 public final class Expressions {
-  private static Map<Pattern, Class<? extends Expression>> expressions;
 
-  static {
-    expressions = new LinkedHashMap<>();
+	/**
+	 * Pattern与Pattern的映射
+	 */
+	private static Map<Pattern, Class<? extends Expression>> expressions;
 
-    /*
-     * basic pattern for variable names. this is compliant with RFC 6570 Simple Expressions ONLY
-     * with the following additional values allowed without required pct-encoding:
-     *
-     * - brackets - dashes
-     *
-     * see https://tools.ietf.org/html/rfc6570#section-2.3 for more information.
-     */
+	static {
+		expressions = new LinkedHashMap<>();
 
-    expressions.put(Pattern.compile("^([+#./;?&]?)(.*)$"),
-        SimpleExpression.class);
-  }
+		/*
+		 * basic pattern for variable names. this is compliant with RFC 6570 Simple Expressions ONLY
+		 * with the following additional values allowed without required pct-encoding:
+		 *
+		 * - brackets - dashes
+		 *
+		 * see https://tools.ietf.org/html/rfc6570#section-2.3 for more information.
+		 */
 
-  public static Expression create(final String value) {
+		expressions.put(Pattern.compile("^([+#./;?&]?)(.*)$"), SimpleExpression.class);
+	}
 
-    /* remove the start and end braces */
-    final String expression = stripBraces(value);
-    if (expression == null || expression.isEmpty()) {
-      throw new IllegalArgumentException("an expression is required.");
-    }
+	public static Expression create(final String value) {
 
-    Optional<Entry<Pattern, Class<? extends Expression>>> matchedExpressionEntry =
-        expressions.entrySet()
-            .stream()
-            .filter(entry -> entry.getKey().matcher(expression).matches())
-            .findFirst();
+		/* remove the start and end braces */
+		final String expression = stripBraces(value);
+		if (expression == null || expression.isEmpty()) {
+			throw new IllegalArgumentException("an expression is required.");
+		}
 
-    if (!matchedExpressionEntry.isPresent()) {
-      /* not a valid expression */
-      return null;
-    }
+		Optional<Entry<Pattern, Class<? extends Expression>>> matchedExpressionEntry =
+				expressions.entrySet()
+						.stream()
+						.filter(entry -> entry.getKey().matcher(expression).matches())
+						.findFirst();
 
-    Entry<Pattern, Class<? extends Expression>> matchedExpression = matchedExpressionEntry.get();
-    Pattern expressionPattern = matchedExpression.getKey();
+		if (!matchedExpressionEntry.isPresent()) {
+			/* not a valid expression */
+			return null;
+		}
 
-    /* create a new regular expression matcher for the expression */
-    String variableName = null;
-    String variablePattern = null;
-    Matcher matcher = expressionPattern.matcher(expression);
-    if (matcher.matches()) {
-      /* we have a valid variable expression, extract the name from the first group */
-      variableName = matcher.group(2).trim();
-      if (variableName.contains(":")) {
-        /* split on the colon */
-        String[] parts = variableName.split(":");
-        variableName = parts[0];
-        variablePattern = parts[1];
-      }
+		Entry<Pattern, Class<? extends Expression>> matchedExpression = matchedExpressionEntry.get();
+		Pattern expressionPattern = matchedExpression.getKey();
 
-      /* look for nested expressions */
-      if (variableName.contains("{")) {
-        /* nested, literal */
-        return null;
-      }
-    }
+		/* create a new regular expression matcher for the expression */
+		String variableName = null;
+		String variablePattern = null;
+		Matcher matcher = expressionPattern.matcher(expression);
+		if (matcher.matches()) {
+			/* we have a valid variable expression, extract the name from the first group */
+			variableName = matcher.group(2).trim();
+			if (variableName.contains(":")) {
+				/* split on the colon */
+				String[] parts = variableName.split(":");
+				variableName = parts[0];
+				variablePattern = parts[1];
+			}
 
-    return new SimpleExpression(variableName, variablePattern);
-  }
+			/* look for nested expressions */
+			if (variableName.contains("{")) {
+				/* nested, literal */
+				return null;
+			}
+		}
 
-  private static String stripBraces(String expression) {
-    if (expression == null) {
-      return null;
-    }
-    if (expression.startsWith("{") && expression.endsWith("}")) {
-      return expression.substring(1, expression.length() - 1);
-    }
-    return expression;
-  }
+		return new SimpleExpression(variableName, variablePattern);
+	}
 
-  /**
-   * Expression that adheres to Simple String Expansion as outlined in <a
-   * href="https://tools.ietf.org/html/rfc6570#section-3.2.2>Simple String Expansion (Level 1)</a>
-   */
-  static class SimpleExpression extends Expression {
+	private static String stripBraces(String expression) {
+		if (expression == null) {
+			return null;
+		}
+		if (expression.startsWith("{") && expression.endsWith("}")) {
+			return expression.substring(1, expression.length() - 1);
+		}
+		return expression;
+	}
 
-    SimpleExpression(String expression, String pattern) {
-      super(expression, pattern);
-    }
+	/**
+	 * Expression that adheres to Simple String Expansion as outlined in <a
+	 * href="https://tools.ietf.org/html/rfc6570#section-3.2.2>Simple String Expansion (Level 1)</a>
+	 */
+	static class SimpleExpression extends Expression {
 
-    String encode(Object value) {
-      return UriUtils.encode(value.toString(), Util.UTF_8);
-    }
+		SimpleExpression(String expression, String pattern) {
+			super(expression, pattern);
+		}
 
-    @Override
-    String expand(Object variable, boolean encode) {
-      StringBuilder expanded = new StringBuilder();
-      if (Iterable.class.isAssignableFrom(variable.getClass())) {
-        expanded.append(this.expandIterable((Iterable<?>) variable));
-      } else {
-        expanded.append((encode) ? encode(variable) : variable);
-      }
+		String encode(Object value) {
+			return UriUtils.encode(value.toString(), Util.UTF_8);
+		}
 
-      /* return the string value of the variable */
-      String result = expanded.toString();
-      if (!this.matches(result)) {
-        throw new IllegalArgumentException("Value " + expanded
-            + " does not match the expression pattern: " + this.getPattern());
-      }
-      return result;
-    }
+		@Override
+		String expand(Object variable, boolean encode) {
+			StringBuilder expanded = new StringBuilder();
+			if (Iterable.class.isAssignableFrom(variable.getClass())) {
+				expanded.append(this.expandIterable((Iterable<?>) variable));
+			} else {
+				expanded.append((encode) ? encode(variable) : variable);
+			}
+
+			/* return the string value of the variable */
+			String result = expanded.toString();
+			if (!this.matches(result)) {
+				throw new IllegalArgumentException("Value " + expanded
+						+ " does not match the expression pattern: " + this.getPattern());
+			}
+			return result;
+		}
 
 
-    private String expandIterable(Iterable<?> values) {
-      StringBuilder result = new StringBuilder();
-      for (Object value : values) {
-        if (value == null) {
-          /* skip */
-          continue;
-        }
+		private String expandIterable(Iterable<?> values) {
+			StringBuilder result = new StringBuilder();
+			for (Object value : values) {
+				if (value == null) {
+					/* skip */
+					continue;
+				}
 
-        /* expand the value */
-        String expanded = this.encode(value);
-        if (expanded.isEmpty()) {
-          /* always append the separator */
-          result.append(",");
-        } else {
-          if (result.length() != 0) {
-            if (!result.toString().equalsIgnoreCase(",")) {
-              result.append(",");
-            }
-          }
-          result.append(expanded);
-        }
-      }
+				/* expand the value */
+				String expanded = this.encode(value);
+				if (expanded.isEmpty()) {
+					/* always append the separator */
+					result.append(",");
+				} else {
+					if (result.length() != 0) {
+						if (!result.toString().equalsIgnoreCase(",")) {
+							result.append(",");
+						}
+					}
+					result.append(expanded);
+				}
+			}
 
-      /* return the expanded value */
-      return result.toString();
-    }
-  }
+			/* return the expanded value */
+			return result.toString();
+		}
+	}
 }

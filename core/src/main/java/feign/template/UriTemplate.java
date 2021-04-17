@@ -58,8 +58,7 @@ public class UriTemplate extends Template {
 	 * @return a new UriTemplate with the fragment appended.
 	 */
 	public static UriTemplate append(UriTemplate uriTemplate, String fragment) {
-		return new UriTemplate(uriTemplate.toString() + fragment, uriTemplate.encodeSlash(),
-				uriTemplate.getCharset());
+		return new UriTemplate(uriTemplate.toString() + fragment, uriTemplate.encodeSlash(), uriTemplate.getCharset());
 	}
 
 	/**

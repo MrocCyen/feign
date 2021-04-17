@@ -45,7 +45,7 @@ public final class BodyTemplate extends Template {
 	 * Create a new Body Template.
 	 *
 	 * @param template to parse.
-	 * @param charset to use when encoding the template.
+	 * @param charset  to use when encoding the template.
 	 * @return a Body Template instance.
 	 */
 	public static BodyTemplate create(String template, Charset charset) {

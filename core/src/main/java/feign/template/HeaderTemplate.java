@@ -34,7 +34,13 @@ import java.util.stream.StreamSupport;
  */
 public final class HeaderTemplate {
 
+	/**
+	 * header的属性名称
+	 */
 	private final String name;
+	/**
+	 * 属性对应的模板列表
+	 */
 	private final List<Template> values = new CopyOnWriteArrayList<>();
 
 	public static HeaderTemplate create(String name, Iterable<String> values) {
