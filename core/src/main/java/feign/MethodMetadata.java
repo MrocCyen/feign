@@ -52,7 +52,13 @@ public final class MethodMetadata implements Serializable {
 	 * 请求体参数的类型
 	 */
 	private transient Type bodyType;
+	/**
+	 * 请求模板，用户可以自己设置
+	 */
 	private final RequestTemplate template = new RequestTemplate();
+	/**
+	 * form表单参数
+	 */
 	private final List<String> formParams = new ArrayList<>();
 	/**
 	 * 参数位置和参数每个注解的映射
