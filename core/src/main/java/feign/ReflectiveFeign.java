@@ -166,19 +166,23 @@ public class ReflectiveFeign extends Feign {
 			Map<String, MethodHandler> result = new LinkedHashMap<>();
 			for (MethodMetadata md : metadata) {
 				BuildTemplateByResolvingArgs buildTemplate;
+				//form表单数据不为空
 				if (!md.formParams().isEmpty() && md.template().bodyTemplate() == null) {
 					buildTemplate = new BuildFormEncodedTemplateFromArgs(md, encoder, queryMapEncoder, target);
 				} else if (md.bodyIndex() != null) {
+					//bodyIndex不为空
 					buildTemplate = new BuildEncodedTemplateFromArgs(md, encoder, queryMapEncoder, target);
 				} else {
+					//默认使用这个工厂
 					buildTemplate = new BuildTemplateByResolvingArgs(md, queryMapEncoder, target);
 				}
+				//忽略的话，这里调用会直接出异常
 				if (md.isIgnored()) {
 					result.put(md.configKey(), args -> {
 						throw new IllegalStateException(md.configKey() + " is not a method handled by feign");
 					});
 				} else {
-					//SynchronousMethodHandler.Factory
+					//SynchronousMethodHandler.Factory直接创建SynchronousMethodHandler
 					result.put(md.configKey(), factory.create(target, md, buildTemplate, options, decoder, errorDecoder));
 				}
 			}
@@ -194,7 +198,8 @@ public class ReflectiveFeign extends Feign {
 		protected final Target<?> target;
 		private final Map<Integer, Expander> indexToExpander = new LinkedHashMap<>();
 
-		private BuildTemplateByResolvingArgs(MethodMetadata metadata, QueryMapEncoder queryMapEncoder,
+		private BuildTemplateByResolvingArgs(MethodMetadata metadata,
+		                                     QueryMapEncoder queryMapEncoder,
 		                                     Target target) {
 			this.metadata = metadata;
 			this.target = target;
@@ -351,8 +356,10 @@ public class ReflectiveFeign extends Feign {
 
 		private final Encoder encoder;
 
-		private BuildFormEncodedTemplateFromArgs(MethodMetadata metadata, Encoder encoder,
-		                                         QueryMapEncoder queryMapEncoder, Target target) {
+		private BuildFormEncodedTemplateFromArgs(MethodMetadata metadata,
+		                                         Encoder encoder,
+		                                         QueryMapEncoder queryMapEncoder,
+		                                         Target target) {
 			super(metadata, queryMapEncoder, target);
 			this.encoder = encoder;
 		}
@@ -382,8 +389,10 @@ public class ReflectiveFeign extends Feign {
 
 		private final Encoder encoder;
 
-		private BuildEncodedTemplateFromArgs(MethodMetadata metadata, Encoder encoder,
-		                                     QueryMapEncoder queryMapEncoder, Target target) {
+		private BuildEncodedTemplateFromArgs(MethodMetadata metadata,
+		                                     Encoder encoder,
+		                                     QueryMapEncoder queryMapEncoder,
+		                                     Target target) {
 			super(metadata, queryMapEncoder, target);
 			this.encoder = encoder;
 		}
