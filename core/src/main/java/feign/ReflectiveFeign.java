@@ -226,27 +226,35 @@ public class ReflectiveFeign extends Feign {
 
 		@Override
 		public RequestTemplate create(Object[] argv) {
+			//获取MethodMetadata中RequestTemplate的数据
 			RequestTemplate mutable = RequestTemplate.from(metadata.template());
+			//设置target
 			mutable.feignTarget(target);
+			//设置urlIndex
 			if (metadata.urlIndex() != null) {
 				int urlIndex = metadata.urlIndex();
 				checkArgument(argv[urlIndex] != null, "URI parameter %s was null", urlIndex);
 				mutable.target(String.valueOf(argv[urlIndex]));
 			}
 			Map<String, Object> varBuilder = new LinkedHashMap<>();
+			//每个参数的位置和注解名称的映射
 			for (Entry<Integer, Collection<String>> entry : metadata.indexToName().entrySet()) {
 				int i = entry.getKey();
+				//当前位置的参数对象
 				Object value = argv[entry.getKey()];
 				if (value != null) { // Null values are skipped.
 					if (indexToExpander.containsKey(i)) {
+						//有这个参数的扩展，就扩展
 						value = expandElements(indexToExpander.get(i), value);
 					}
+					//value可能是扩展后的值
 					for (String name : entry.getValue()) {
 						varBuilder.put(name, value);
 					}
 				}
 			}
 
+			//varBuilder的key是注解的名称，value是扩展后的值
 			RequestTemplate template = resolve(argv, mutable, varBuilder);
 			if (metadata.queryMapIndex() != null) {
 				// add query map parameters after initial resolve so that they take
