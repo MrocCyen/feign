@@ -233,7 +233,7 @@ public class ReflectiveFeign extends Feign {
 				checkArgument(argv[urlIndex] != null, "URI parameter %s was null", urlIndex);
 				mutable.target(String.valueOf(argv[urlIndex]));
 			}
-			Map<String, Object> varBuilder = new LinkedHashMap<String, Object>();
+			Map<String, Object> varBuilder = new LinkedHashMap<>();
 			for (Entry<Integer, Collection<String>> entry : metadata.indexToName().entrySet()) {
 				int i = entry.getKey();
 				Object value = argv[entry.getKey()];
